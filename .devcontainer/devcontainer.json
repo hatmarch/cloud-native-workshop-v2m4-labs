@@ -1,0 +1,56 @@
+{
+	"name": "Serverless Demo",
+	"dockerFile": "Dockerfile",
+	"runArgs": [
+		// FIXME: Due to issues with docker for mac, need to mount the docker socket in this .raw way
+		// see: https://github.com/docker/for-mac/issues/4755
+		"-v", "/var/run/docker.sock.raw:/var/run/docker.sock",
+		// share docker registry credentials
+		// FIXME: This does not appear to work with all DockerDesktop for Mac configurations
+		//"-v", "${env:HOME}/.docker:/home/jboss/.docker",
+
+		"-v", "${env:HOME}/.aws:/home/jboss/.aws",
+		"-v", "${env:HOME}/.kube:/home/jboss/.kube",
+		"-v", "${env:HOME}/.vs-kubernetes:/home/jboss/.vs-kubernetes",
+
+		// use local .oh-my-zsh configuration if it exists (overwriting one in container).
+		// comment the following line out if you want to use local installation on container instead
+		"-v", "${env:HOME}/.oh-my-zsh:/home/jboss/.oh-my-zsh",
+		"-v", "${env:HOME}/.helm:/home/jboss/.helm",
+		"-v", "${env:HOME}/.ssh:/home/jboss/.ssh",
+
+		// Ensure that the m2 cache persists
+		"-v", "${localWorkspaceFolder}/.m2/:/home/jboss/.m2",
+
+		// Used for AWS based clusters
+		"-e", "AWS_PROFILE=redhat",
+		"-e", "REGION=ap-southeast-2"
+		//"AWS_PROFILE=${env:AWS_PROFILE}"
+	],
+	"postStartCommand": "rsync -a .devcontainer/workspace-setup/ ${containerWorkspaceFolder}/.vscode/ --ignore-existing",
+	"extensions": [
+		"vscjava.vscode-java-pack",
+		"redhat.vscode-xml",
+		"joaompinto.asciidoctor-vscode",
+		"redhat.vscode-quarkus",
+		"ggrebert.quarkus-snippets",
+		"humao.rest-client",
+		"redhat.vscode-knative",
+		"eamodio.gitlens",
+		"pkief.material-icon-theme",
+		// Needs to be added to the client
+		"jaypateldesigns.color-maze"
+	],
+	"settings":{
+		"java.home": "/usr/lib/jvm/java-11",
+		"http.proxyStrictSSL": false,
+		"workbench.tips.enabled": false,
+		"workbench.colorTheme": "Color Maze",
+		"files.exclude": {
+			"**/.classpath": true,
+			"**/.project": true,
+			"**/.settings": true,
+			"**/.factorypath": true,
+            "**/.m2": true,
+	}
+}
