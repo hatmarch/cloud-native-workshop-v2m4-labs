@@ -1,0 +1,1719 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: lab3-template
+  annotations:
+    description: "Template for creation of all the elements of lab3"
+parameters:
+- description: The name of the project
+  displayName: Name of the project
+  name: PROJECT
+  value: "user1-cloudnativeapps"
+  required: true
+objects:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      app.openshift.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+      app.quarkus.io/build-timestamp: 2021-01-21 - 01:56:00 +0000
+      app.quarkus.io/commit-id: 17acc97cebf269dccdf513379b2ae964179a127c
+      app.quarkus.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+    creationTimestamp: "2021-01-21T01:56:52Z"
+    labels:
+      app.kubernetes.io/name: cart
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+      app.openshift.io/runtime: quarkus
+    name: cart
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app.kubernetes.io/name: cart
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: "2021-01-21T01:43:46Z"
+    labels:
+      app: catalog
+      app.kubernetes.io/component: catalog
+      app.kubernetes.io/instance: catalog
+    name: catalog
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    - name: 8443-tcp
+      port: 8443
+      protocol: TCP
+      targetPort: 8443
+    - name: 8778-tcp
+      port: 8778
+      protocol: TCP
+      targetPort: 8778
+    selector:
+      deploymentconfig: catalog
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
+    creationTimestamp: "2021-01-21T01:41:06Z"
+    labels:
+      template: postgresql-ephemeral-template
+      template.openshift.io/template-instance-owner: eb556560-0ca8-4c46-879e-14c52945e1aa
+    name: catalog-database
+  spec:
+    ports:
+    - name: postgresql
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      name: catalog-database
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      nodeshift/git-branch: ocp-4.5
+      nodeshift/git-commit: 17acc97cebf269dccdf513379b2ae964179a127c
+    creationTimestamp: "2021-01-21T02:05:36Z"
+    labels:
+      app.kubernetes.io/component: coolstore-ui
+      app.kubernetes.io/instance: coolstore-ui
+      app.kubernetes.io/name: nodejs
+      app.openshift.io/runtime: nodejs
+      project: coolstore-ui
+      provider: nodeshift
+      version: 1.0.0
+    name: coolstore-ui
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      project: coolstore-ui
+      provider: nodeshift
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: "2021-01-21T01:44:34Z"
+    labels:
+      app: datagrid-service
+      app.kubernetes.io/component: datagrid-service
+      app.kubernetes.io/instance: datagrid-service
+    name: datagrid-service
+  spec:
+    ports:
+    - name: 7600-tcp
+      port: 7600
+      protocol: TCP
+      targetPort: 7600
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    - name: 8181-tcp
+      port: 8181
+      protocol: TCP
+      targetPort: 8181
+    - name: 8888-tcp
+      port: 8888
+      protocol: TCP
+      targetPort: 8888
+    - name: 9990-tcp
+      port: 9990
+      protocol: TCP
+      targetPort: 9990
+    - name: 11211-tcp
+      port: 11211
+      protocol: TCP
+      targetPort: 11211
+    - name: 11222-tcp
+      port: 11222
+      protocol: TCP
+      targetPort: 11222
+    - name: 57600-tcp
+      port: 57600
+      protocol: TCP
+      targetPort: 57600
+    selector:
+      deploymentconfig: datagrid-service
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      app.openshift.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+      app.quarkus.io/build-timestamp: 2021-01-21 - 01:34:53 +0000
+      app.quarkus.io/commit-id: 17acc97cebf269dccdf513379b2ae964179a127c
+      app.quarkus.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+    creationTimestamp: "2021-01-21T01:36:45Z"
+    labels:
+      app.kubernetes.io/name: inventory
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+      app.openshift.io/runtime: quarkus
+    name: inventory
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app.kubernetes.io/name: inventory
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
+    creationTimestamp: "2021-01-21T01:33:33Z"
+    labels:
+      template: postgresql-ephemeral-template
+      template.openshift.io/template-instance-owner: 25afcf30-7ff0-43a2-9242-588efcd10b79
+    name: inventory-database
+  spec:
+    ports:
+    - name: postgresql
+      port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      name: inventory-database
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      app.openshift.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+      app.quarkus.io/build-timestamp: 2021-01-21 - 02:03:40 +0000
+      app.quarkus.io/commit-id: 17acc97cebf269dccdf513379b2ae964179a127c
+      app.quarkus.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+    creationTimestamp: "2021-01-21T02:04:33Z"
+    labels:
+      app.kubernetes.io/name: order
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+      app.openshift.io/runtime: quarkus
+    name: order
+  spec:
+    ports:
+    - name: http
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app.kubernetes.io/name: order
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: "2021-01-21T02:03:13Z"
+    labels:
+      app: order-database
+      app.kubernetes.io/component: order-database
+      app.kubernetes.io/instance: order-database
+    name: order-database
+  spec:
+    ports:
+    - name: 27017-tcp
+      port: 27017
+      protocol: TCP
+      targetPort: 27017
+    selector:
+      deploymentconfig: order-database
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      app.openshift.io/connects-to: catalog,datagrid-service
+      app.openshift.io/vcs-ref: ocp-4.5
+      app.openshift.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+      app.quarkus.io/build-timestamp: 2021-01-21 - 01:56:00 +0000
+      app.quarkus.io/commit-id: 17acc97cebf269dccdf513379b2ae964179a127c
+      app.quarkus.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+    labels:
+      app.kubernetes.io/name: cart
+      app.kubernetes.io/part-of: cart
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+      app.openshift.io/runtime: quarkus
+    name: cart
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      app.kubernetes.io/name: cart
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          app.openshift.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+          app.quarkus.io/build-timestamp: 2021-01-21 - 01:56:00 +0000
+          app.quarkus.io/commit-id: 17acc97cebf269dccdf513379b2ae964179a127c
+          app.quarkus.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/name: cart
+          app.kubernetes.io/version: 1.0-SNAPSHOT
+          app.openshift.io/runtime: quarkus
+        namespace: ${PROJECT}
+      spec:
+        containers:
+        - args:
+          - -jar
+          - /deployments/cart-1.0-SNAPSHOT-runner.jar
+          - -cp
+          - /deployments/lib/org.jboss.spec.javax.ws.rs.jboss-jaxrs-api_2.1_spec-2.0.1.Final-redhat-00001.jar:/deployments/lib/org.jboss.spec.javax.xml.bind.jboss-jaxb-api_2.3_spec-2.0.0.Final-redhat-00001.jar:/deployments/lib/org.jboss.resteasy.resteasy-core-spi-4.5.6.Final-redhat-00004.jar:/deployments/lib/com.ibm.async.asyncutil-0.1.0.redhat-00002.jar:/deployments/lib/org.jboss.resteasy.resteasy-core-4.5.6.Final-redhat-00004.jar:/deployments/lib/com.sun.activation.jakarta.activation-1.2.1.redhat-00002.jar:/deployments/lib/io.quarkus.quarkus-resteasy-common-1.7.5.Final-redhat-00007.jar:/deployments/lib/jakarta.validation.jakarta.validation-api-2.0.2.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-resteasy-server-common-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-resteasy-1.7.5.Final-redhat-00007.jar:/deployments/lib/org.eclipse.yasson-1.0.8.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-jsonb-1.7.5.Final-redhat-00007.jar:/deployments/lib/org.glassfish.jakarta.json-1.1.6.redhat-00003.jar:/deployments/lib/jakarta.json.bind.jakarta.json.bind-api-1.0.2.redhat-00003.jar:/deployments/lib/org.jboss.logging.jboss-logging-3.3.2.Final-redhat-00001.jar:/deployments/lib/org.jboss.resteasy.resteasy-json-binding-provider-4.5.6.Final-redhat-00004.jar:/deployments/lib/org.jboss.resteasy.resteasy-json-p-provider-4.5.6.Final-redhat-00004.jar:/deployments/lib/commons-io.commons-io-2.7.0.redhat-00003.jar:/deployments/lib/io.quarkus.quarkus-resteasy-jsonb-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.netty.netty-common-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-buffer-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-transport-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-codec-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-handler-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-codec-socks-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-handler-proxy-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-codec-http-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-codec-http2-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-resolver-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-codec-dns-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-resolver-dns-4.1.49.Final-redhat-00001.jar:/deployments/lib/com.fasterxml.jackson.core.jackson-core-2.11.2.redhat-00002.jar:/deployments/lib/com.fasterxml.jackson.core.jackson-annotations-2.11.2.redhat-00002.jar:/deployments/lib/com.fasterxml.jackson.core.jackson-databind-2.11.2.redhat-00002.jar:/deployments/lib/io.vertx.vertx-core-3.9.2.redhat-00001.jar:/deployments/lib/org.eclipse.microprofile.openapi.microprofile-openapi-api-1.1.2.redhat-00008.jar:/deployments/lib/org.eclipse.microprofile.config.microprofile-config-api-1.4.0.redhat-00005.jar:/deployments/lib/org.yaml.snakeyaml-1.26.0.redhat-00002.jar:/deployments/lib/com.fasterxml.jackson.dataformat.jackson-dataformat-yaml-2.11.2.redhat-00002.jar:/deployments/lib/org.jboss.jandex-2.2.1.Final-redhat-00001.jar:/deployments/lib/io.smallrye.smallrye-open-api-core-2.0.7.redhat-00001.jar:/deployments/lib/jakarta.annotation.jakarta.annotation-api-1.3.5.redhat-00002.jar:/deployments/lib/jakarta.el.jakarta.el-api-3.0.3.redhat-00002.jar:/deployments/lib/jakarta.interceptor.jakarta.interceptor-api-1.2.5.redhat-00002.jar:/deployments/lib/jakarta.enterprise.jakarta.enterprise.cdi-api-2.0.2.redhat-00002.jar:/deployments/lib/jakarta.inject.jakarta.inject-api-1.0.0.redhat-00002.jar:/deployments/lib/io.quarkus.quarkus-development-mode-spi-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.smallrye.common.smallrye-common-annotation-1.1.0.redhat-00001.jar:/deployments/lib/io.smallrye.config.smallrye-config-common-1.8.5.redhat-00001.jar:/deployments/lib/io.smallrye.common.smallrye-common-function-1.1.0.redhat-00001.jar:/deployments/lib/io.smallrye.common.smallrye-common-expression-1.1.0.redhat-00001.jar:/deployments/lib/io.smallrye.common.smallrye-common-constraint-1.1.0.redhat-00001.jar:/deployments/lib/io.smallrye.config.smallrye-config-1.8.5.redhat-00001.jar:/deployments/lib/org.jboss.logmanager.jboss-logmanager-embedded-1.0.4.redhat-00003.jar:/deployments/lib/org.jboss.logging.jboss-logging-annotations-2.1.0.Final-redhat-00001.jar:/deployments/lib/org.jboss.threads.jboss-threads-3.1.1.Final-redhat-00001.jar:/deployments/lib/org.slf4j.slf4j-api-1.7.30.redhat-00001.jar:/deployments/lib/org.jboss.slf4j.slf4j-jboss-logging-1.2.0.Final-redhat-00001.jar:/deployments/lib/org.graalvm.sdk.graal-sdk-20.1.0.2-0-redhat-00005.jar:/deployments/lib/org.wildfly.common.wildfly-common-1.5.4.Final-format-001-redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-bootstrap-runner-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-core-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-security-runtime-spi-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.smallrye.reactive.mutiny-0.7.0.redhat-00001.jar:/deployments/lib/io.quarkus.security.quarkus-security-1.1.2.Final-redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-vertx-core-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.vertx.vertx-web-common-3.9.2.redhat-00001.jar:/deployments/lib/io.vertx.vertx-auth-common-3.9.2.redhat-00001.jar:/deployments/lib/io.vertx.vertx-bridge-common-3.9.2.redhat-00001.jar:/deployments/lib/io.vertx.vertx-web-3.9.2.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-vertx-http-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.arc.arc-1.7.5.Final-redhat-00007.jar:/deployments/lib/org.eclipse.microprofile.context-propagation.microprofile-context-propagation-api-1.0.1.redhat-00002.jar:/deployments/lib/io.quarkus.quarkus-arc-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-swagger-ui-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-smallrye-openapi-1.7.5.Final-redhat-00007.jar:/deployments/lib/com.google.errorprone.error_prone_annotations-2.2.0.redhat-00001.jar:/deployments/lib/com.github.ben-manes.caffeine.caffeine-2.8.5.redhat-00003.jar:/deployments/lib/io.quarkus.quarkus-caffeine-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-netty-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-jsonp-1.7.5.Final-redhat-00007.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-asn1-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-keystore-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-provider-util-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-x500-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-credential-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-password-impl-1.12.1.Final-redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-elytron-security-common-1.7.5.Final-redhat-00007.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-auth-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-base-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-permission-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-auth-server-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-ssl-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-sasl-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-http-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-mechanism-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-sasl-plain-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-mechanism-digest-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-util-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-sasl-digest-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-sasl-external-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-mechanism-oauth2-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-sasl-oauth2-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-mechanism-scram-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-sasl-scram-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.infinispan.infinispan-commons-11.0.3.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-audit-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-auth-server-deprecated-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-auth-server-http-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-auth-server-sasl-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-auth-util-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-credential-source-impl-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-client-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-credential-source-deprecated-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-credential-store-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-digest-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-http-basic-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-http-bearer-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-http-cert-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-http-deprecated-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-http-digest-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-http-form-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-http-spnego-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-http-sso-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-http-util-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-jacc-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-jaspi-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-json-util-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-mechanism-gssapi-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-mechanism-http-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-realm-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-realm-jdbc-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-realm-ldap-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-realm-token-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-sasl-anonymous-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-sasl-auth-util-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-sasl-deprecated-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-sasl-entity-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-sasl-gs2-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-sasl-gssapi-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-sasl-localuser-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-sasl-otp-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-security-manager-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-security-manager-action-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-x500-cert-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-x500-cert-acme-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-x500-cert-util-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-x500-deprecated-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-x500-principal-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.wildfly.security.wildfly-elytron-1.12.1.Final-redhat-00001.jar:/deployments/lib/org.reactivestreams.reactive-streams-1.0.3.redhat-00003.jar:/deployments/lib/io.reactivex.rxjava3.rxjava-3.0.4.redhat-00001.jar:/deployments/lib/io.netty.netty-transport-native-unix-common-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-transport-native-epoll-4.1.49.Final-redhat-00001-linux-x86_64.jar:/deployments/lib/com.google.code.gson.gson-2.8.6.redhat-00001.jar:/deployments/lib/org.infinispan.infinispan-client-hotrod-11.0.3.Final-redhat-00001.jar:/deployments/lib/jakarta.transaction.jakarta.transaction-api-1.3.3.redhat-00002.jar:/deployments/lib/org.infinispan.protostream.protostream-4.3.3.Final-redhat-00002.jar:/deployments/lib/org.infinispan.infinispan-remote-query-client-11.0.3.Final-redhat-00001.jar:/deployments/lib/org.infinispan.infinispan-query-dsl-11.0.3.Final-redhat-00001.jar:/deployments/lib/org.infinispan.protostream.protostream-processor-4.3.3.Final-redhat-00002.jar:/deployments/lib/io.quarkus.quarkus-infinispan-client-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-kubernetes-client-internal-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-openshift-1.7.5.Final-redhat-00007.jar
+          - -Dquarkus.http.host=0.0.0.0
+          - -Djava.util.logging.manager=org.jboss.logmanager.LogManager
+          command:
+          - java
+          env:
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: JAVA_APP_JAR
+            value: /deployments/cart-1.0-SNAPSHOT-runner.jar
+          image: image-registry.openshift-image-registry.svc:5000/${PROJECT}/cart:initial
+          imagePullPolicy: IfNotPresent
+          name: cart
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: cart
+        serviceAccountName: cart
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - cart
+        from:
+          kind: ImageStreamTag
+          name: cart:1.0-SNAPSHOT
+          namespace: ${PROJECT}
+        lastTriggeredImage: image-registry.openshift-image-registry.svc:5000/${PROJECT}/cart:initial
+      type: ImageChange
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      app.openshift.io/connects-to: inventory,catalog-database
+      app.openshift.io/vcs-ref: ocp-4.5
+      app.openshift.io/vcs-uri: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+      openshift.io/generated-by: OpenShiftNewApp
+    labels:
+      app: catalog
+      app.kubernetes.io/component: catalog
+      app.kubernetes.io/instance: catalog
+      app.kubernetes.io/part-of: catalog
+      app.openshift.io/runtime: spring
+    name: catalog
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      deploymentconfig: catalog
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          deploymentconfig: catalog
+      spec:
+        containers:
+        - env:
+          - name: JAVA_OPTS_APPEND
+            value: -Dspring.profiles.active=openshift
+          image: image-registry.openshift-image-registry.svc:5000/${PROJECT}/catalog:initial
+          imagePullPolicy: Always
+          name: catalog
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 8443
+            protocol: TCP
+          - containerPort: 8778
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - catalog
+        from:
+          kind: ImageStreamTag
+          name: catalog:latest
+          namespace: ${PROJECT}
+        lastTriggeredImage: image-registry.openshift-image-registry.svc:5000/${PROJECT}/catalog:initial
+      type: ImageChange
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      template.alpha.openshift.io/wait-for-ready: "true"
+    labels:
+      app.kubernetes.io/part-of: catalog
+      app.openshift.io/runtime: postgresql
+      template: postgresql-ephemeral-template
+      template.openshift.io/template-instance-owner: eb556560-0ca8-4c46-879e-14c52945e1aa
+    name: catalog-database
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      name: catalog-database
+    strategy:
+      activeDeadlineSeconds: 21600
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: catalog-database
+      spec:
+        containers:
+        - env:
+          - name: POSTGRESQL_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: catalog-database
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: catalog-database
+          - name: POSTGRESQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: catalog-database
+          image: image-registry.openshift-image-registry.svc:5000/openshift/postgresql@sha256:2a2f1fe2ed8627cae3daa9194d555b689ac23c1d08ca0535806ab34a1f8070be
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - /usr/libexec/check-container
+              - --live
+            failureThreshold: 3
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          name: postgresql
+          ports:
+          - containerPort: 5432
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - /usr/libexec/check-container
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: 512Mi
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/pgsql/data
+            name: catalog-database-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: catalog-database-data
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - postgresql
+        from:
+          kind: ImageStreamTag
+          name: postgresql:10
+          namespace: openshift
+        lastTriggeredImage: image-registry.openshift-image-registry.svc:5000/openshift/postgresql@sha256:2a2f1fe2ed8627cae3daa9194d555b689ac23c1d08ca0535806ab34a1f8070be
+      type: ImageChange
+    - type: ConfigChange
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      app.openshift.io/connects-to: order-cart,catalog,inventory,order
+      app.openshift.io/vcs-ref: ocp-4.5
+      app.openshift.io/vcs-uri: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+      nodeshift/git-branch: ocp-4.5
+      nodeshift/git-commit: 17acc97cebf269dccdf513379b2ae964179a127c
+    labels:
+      app: coolstore-ui
+      app.kubernetes.io/component: coolstore-ui
+      app.kubernetes.io/instance: coolstore-ui
+      app.kubernetes.io/name: nodejs
+      app.kubernetes.io/part-of: coolstore
+      app.openshift.io/runtime: nodejs
+      project: coolstore-ui
+      provider: nodeshift
+      version: 1.0.0
+    name: coolstore-ui
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 2
+    selector:
+      app: coolstore-ui
+      project: coolstore-ui
+      provider: nodeshift
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          nodeshift/git-branch: ocp-4.5
+          nodeshift/git-commit: 17acc97cebf269dccdf513379b2ae964179a127c
+        creationTimestamp: null
+        labels:
+          app: coolstore-ui
+          project: coolstore-ui
+          provider: nodeshift
+          version: 1.0.0
+      spec:
+        containers:
+        - image: image-registry.openshift-image-registry.svc:5000/${PROJECT}/coolstore-ui:initial
+          imagePullPolicy: Always
+          name: coolstore-ui
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          resources: {}
+          securityContext:
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - coolstore-ui
+        from:
+          kind: ImageStreamTag
+          name: coolstore-ui:latest
+          namespace: ${PROJECT}
+        lastTriggeredImage: image-registry.openshift-image-registry.svc:5000/${PROJECT}/coolstore-ui:initial
+      type: ImageChange
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    labels:
+      app: datagrid-service
+      app.kubernetes.io/component: datagrid-service
+      app.kubernetes.io/instance: datagrid-service
+      app.kubernetes.io/part-of: cart
+      app.openshift.io/runtime: datagrid
+    name: datagrid-service
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      deploymentconfig: datagrid-service
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          deploymentconfig: datagrid-service
+      spec:
+        containers:
+        - image: jboss/infinispan-server@sha256:e273ee003839cba43206f7efcf72724bdb13baef36956088a1871cb2a5278fc0
+          imagePullPolicy: IfNotPresent
+          name: datagrid-service
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          - containerPort: 8181
+            protocol: TCP
+          - containerPort: 8888
+            protocol: TCP
+          - containerPort: 9990
+            protocol: TCP
+          - containerPort: 11211
+            protocol: TCP
+          - containerPort: 11222
+            protocol: TCP
+          - containerPort: 57600
+            protocol: TCP
+          - containerPort: 7600
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - datagrid-service
+        from:
+          kind: ImageStreamTag
+          name: datagrid-service:10.0.0.Beta3
+          namespace: ${PROJECT}
+        lastTriggeredImage: jboss/infinispan-server@sha256:e273ee003839cba43206f7efcf72724bdb13baef36956088a1871cb2a5278fc0
+      type: ImageChange
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      app.openshift.io/connects-to: inventory-database
+      app.openshift.io/vcs-ref: ocp-4.5
+      app.openshift.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+      app.quarkus.io/build-timestamp: 2021-01-21 - 01:34:53 +0000
+      app.quarkus.io/commit-id: 17acc97cebf269dccdf513379b2ae964179a127c
+      app.quarkus.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+    labels:
+      app.kubernetes.io/name: inventory
+      app.kubernetes.io/part-of: inventory
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+      app.openshift.io/runtime: quarkus
+    name: inventory
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      app.kubernetes.io/name: inventory
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          app.openshift.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+          app.quarkus.io/build-timestamp: 2021-01-21 - 01:34:53 +0000
+          app.quarkus.io/commit-id: 17acc97cebf269dccdf513379b2ae964179a127c
+          app.quarkus.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/name: inventory
+          app.kubernetes.io/version: 1.0-SNAPSHOT
+          app.openshift.io/runtime: quarkus
+        namespace: ${PROJECT}
+      spec:
+        containers:
+        - args:
+          - -jar
+          - /deployments/inventory-1.0-SNAPSHOT-runner.jar
+          - -cp
+          - /deployments/lib/io.quarkus.quarkus-security-runtime-spi-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.smallrye.reactive.mutiny-0.7.0.redhat-00001.jar:/deployments/lib/io.quarkus.security.quarkus-security-1.1.2.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-codec-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-handler-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-netty-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.netty.netty-common-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-buffer-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-transport-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-codec-socks-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-handler-proxy-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-codec-http-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-codec-http2-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-resolver-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-codec-dns-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-resolver-dns-4.1.49.Final-redhat-00001.jar:/deployments/lib/com.fasterxml.jackson.core.jackson-core-2.11.2.redhat-00002.jar:/deployments/lib/io.vertx.vertx-core-3.9.2.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-vertx-core-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.vertx.vertx-web-common-3.9.2.redhat-00001.jar:/deployments/lib/io.vertx.vertx-auth-common-3.9.2.redhat-00001.jar:/deployments/lib/io.vertx.vertx-bridge-common-3.9.2.redhat-00001.jar:/deployments/lib/io.vertx.vertx-web-3.9.2.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-vertx-http-1.7.5.Final-redhat-00007.jar:/deployments/lib/org.jboss.spec.javax.ws.rs.jboss-jaxrs-api_2.1_spec-2.0.1.Final-redhat-00001.jar:/deployments/lib/org.jboss.resteasy.resteasy-core-spi-4.5.6.Final-redhat-00004.jar:/deployments/lib/com.ibm.async.asyncutil-0.1.0.redhat-00002.jar:/deployments/lib/org.jboss.resteasy.resteasy-core-4.5.6.Final-redhat-00004.jar:/deployments/lib/io.quarkus.quarkus-resteasy-common-1.7.5.Final-redhat-00007.jar:/deployments/lib/jakarta.validation.jakarta.validation-api-2.0.2.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-resteasy-server-common-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-resteasy-1.7.5.Final-redhat-00007.jar:/deployments/lib/org.eclipse.yasson-1.0.8.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-jsonp-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-jsonb-1.7.5.Final-redhat-00007.jar:/deployments/lib/org.glassfish.jakarta.json-1.1.6.redhat-00003.jar:/deployments/lib/jakarta.json.bind.jakarta.json.bind-api-1.0.2.redhat-00003.jar:/deployments/lib/org.jboss.logging.jboss-logging-3.3.2.Final-redhat-00001.jar:/deployments/lib/org.jboss.resteasy.resteasy-json-binding-provider-4.5.6.Final-redhat-00004.jar:/deployments/lib/org.jboss.resteasy.resteasy-json-p-provider-4.5.6.Final-redhat-00004.jar:/deployments/lib/commons-io.commons-io-2.7.0.redhat-00003.jar:/deployments/lib/io.quarkus.quarkus-resteasy-jsonb-1.7.5.Final-redhat-00007.jar:/deployments/lib/jakarta.annotation.jakarta.annotation-api-1.3.5.redhat-00002.jar:/deployments/lib/jakarta.el.jakarta.el-api-3.0.3.redhat-00002.jar:/deployments/lib/jakarta.interceptor.jakarta.interceptor-api-1.2.5.redhat-00002.jar:/deployments/lib/jakarta.enterprise.jakarta.enterprise.cdi-api-2.0.2.redhat-00002.jar:/deployments/lib/jakarta.inject.jakarta.inject-api-1.0.0.redhat-00002.jar:/deployments/lib/io.quarkus.quarkus-development-mode-spi-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.smallrye.common.smallrye-common-annotation-1.1.0.redhat-00001.jar:/deployments/lib/org.eclipse.microprofile.config.microprofile-config-api-1.4.0.redhat-00005.jar:/deployments/lib/io.smallrye.config.smallrye-config-common-1.8.5.redhat-00001.jar:/deployments/lib/io.smallrye.common.smallrye-common-function-1.1.0.redhat-00001.jar:/deployments/lib/io.smallrye.common.smallrye-common-expression-1.1.0.redhat-00001.jar:/deployments/lib/io.smallrye.common.smallrye-common-constraint-1.1.0.redhat-00001.jar:/deployments/lib/io.smallrye.config.smallrye-config-1.8.5.redhat-00001.jar:/deployments/lib/org.jboss.logmanager.jboss-logmanager-embedded-1.0.4.redhat-00003.jar:/deployments/lib/org.jboss.logging.jboss-logging-annotations-2.1.0.Final-redhat-00001.jar:/deployments/lib/org.jboss.threads.jboss-threads-3.1.1.Final-redhat-00001.jar:/deployments/lib/org.slf4j.slf4j-api-1.7.30.redhat-00001.jar:/deployments/lib/org.jboss.slf4j.slf4j-jboss-logging-1.2.0.Final-redhat-00001.jar:/deployments/lib/org.graalvm.sdk.graal-sdk-20.1.0.2-0-redhat-00005.jar:/deployments/lib/org.wildfly.common.wildfly-common-1.5.4.Final-format-001-redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-bootstrap-runner-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-core-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-datasource-common-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-datasource-1.7.5.Final-redhat-00007.jar:/deployments/lib/org.jboss.jboss-transaction-spi-7.6.0.Final-redhat-1.jar:/deployments/lib/org.jboss.spec.javax.resource.jboss-connector-api_1.7_spec-1.0.0.Final-redhat-1.jar:/deployments/lib/org.jboss.narayana.jta.narayana-jta-5.10.5.Final-redhat-00001.jar:/deployments/lib/org.jboss.narayana.jts.narayana-jts-integration-5.10.5.Final-redhat-00001.jar:/deployments/lib/io.agroal.agroal-api-1.8.0.redhat-00001.jar:/deployments/lib/io.agroal.agroal-narayana-1.8.0.redhat-00001.jar:/deployments/lib/io.agroal.agroal-pool-1.8.0.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-credentials-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-agroal-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.smallrye.smallrye-context-propagation-api-1.0.13.redhat-00001.jar:/deployments/lib/io.smallrye.smallrye-context-propagation-1.0.13.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-smallrye-context-propagation-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.smallrye.reactive.mutiny-context-propagation-0.7.0.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-mutiny-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.smallrye.smallrye-context-propagation-jta-1.0.13.redhat-00001.jar:/deployments/lib/org.reactivestreams.reactive-streams-1.0.3.redhat-00003.jar:/deployments/lib/io.smallrye.reactive.smallrye-reactive-converter-api-1.1.0.redhat-00001.jar:/deployments/lib/io.smallrye.reactive.smallrye-reactive-converter-mutiny-1.1.0.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-narayana-jta-1.7.5.Final-redhat-00007.jar:/deployments/lib/net.bytebuddy.byte-buddy-1.10.10.redhat-00001.jar:/deployments/lib/antlr.antlr-2.7.7.redhat-7.jar:/deployments/lib/org.jboss.jandex-2.2.1.Final-redhat-00001.jar:/deployments/lib/com.fasterxml.classmate-1.3.4.redhat-1.jar:/deployments/lib/org.dom4j.dom4j-2.1.3.redhat-00001.jar:/deployments/lib/org.hibernate.common.hibernate-commons-annotations-5.1.0.Final-redhat-00005.jar:/deployments/lib/org.hibernate.hibernate-core-5.4.21.Final-redhat-00001.jar:/deployments/lib/org.hibernate.hibernate-graalvm-5.4.21.Final-redhat-00001.jar:/deployments/lib/org.glassfish.jaxb.txw2-2.3.3.b02-redhat-00001.jar:/deployments/lib/com.sun.istack.istack-commons-runtime-3.0.10.redhat-00001.jar:/deployments/lib/com.sun.activation.jakarta.activation-1.2.1.redhat-00002.jar:/deployments/lib/org.glassfish.jaxb.jaxb-runtime-2.3.3.b02-redhat-00001.jar:/deployments/lib/org.jboss.spec.javax.xml.bind.jboss-jaxb-api_2.3_spec-2.0.0.Final-redhat-00001.jar:/deployments/lib/jakarta.persistence.jakarta.persistence-api-2.2.3.redhat-00001.jar:/deployments/lib/jakarta.transaction.jakarta.transaction-api-1.3.3.redhat-00002.jar:/deployments/lib/com.google.errorprone.error_prone_annotations-2.2.0.redhat-00001.jar:/deployments/lib/com.github.ben-manes.caffeine.caffeine-2.8.5.redhat-00003.jar:/deployments/lib/org.hibernate.quarkus-local-cache-0.1.0.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-caffeine-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-hibernate-orm-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-hibernate-orm-panache-common-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.arc.arc-1.7.5.Final-redhat-00007.jar:/deployments/lib/org.eclipse.microprofile.context-propagation.microprofile-context-propagation-api-1.0.1.redhat-00002.jar:/deployments/lib/io.quarkus.quarkus-arc-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-panache-common-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-hibernate-orm-panache-1.7.5.Final-redhat-00007.jar:/deployments/lib/com.h2database.h2-1.4.197.jar:/deployments/lib/org.locationtech.jts.jts-core-1.15.0.jar:/deployments/lib/io.quarkus.quarkus-jdbc-h2-1.7.5.Final.jar:/deployments/lib/io.quarkus.quarkus-kubernetes-client-internal-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-openshift-1.7.5.Final-redhat-00007.jar:/deployments/lib/org.postgresql.postgresql-42.2.14.redhat-00003.jar:/deployments/lib/io.quarkus.quarkus-jdbc-postgresql-1.7.5.Final-redhat-00007.jar
+          - -Dquarkus.http.host=0.0.0.0
+          - -Djava.util.logging.manager=org.jboss.logmanager.LogManager
+          command:
+          - java
+          env:
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: JAVA_APP_JAR
+            value: /deployments/inventory-1.0-SNAPSHOT-runner.jar
+          image: image-registry.openshift-image-registry.svc:5000/${PROJECT}/inventory:initial
+          imagePullPolicy: IfNotPresent
+          name: inventory
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: inventory
+        serviceAccountName: inventory
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - inventory
+        from:
+          kind: ImageStreamTag
+          name: inventory:1.0-SNAPSHOT
+          namespace: ${PROJECT}
+        lastTriggeredImage: image-registry.openshift-image-registry.svc:5000/${PROJECT}/inventory:initial
+      type: ImageChange
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      template.alpha.openshift.io/wait-for-ready: "true"
+    labels:
+      app.kubernetes.io/part-of: inventory
+      app.openshift.io/runtime: postgresql
+      template: postgresql-ephemeral-template
+      template.openshift.io/template-instance-owner: 25afcf30-7ff0-43a2-9242-588efcd10b79
+    name: inventory-database
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      name: inventory-database
+    strategy:
+      activeDeadlineSeconds: 21600
+      recreateParams:
+        timeoutSeconds: 600
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          name: inventory-database
+      spec:
+        containers:
+        - env:
+          - name: POSTGRESQL_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: inventory-database
+          - name: POSTGRESQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: database-password
+                name: inventory-database
+          - name: POSTGRESQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                key: database-name
+                name: inventory-database
+          image: image-registry.openshift-image-registry.svc:5000/openshift/postgresql@sha256:2a2f1fe2ed8627cae3daa9194d555b689ac23c1d08ca0535806ab34a1f8070be
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - /usr/libexec/check-container
+              - --live
+            failureThreshold: 3
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 10
+          name: postgresql
+          ports:
+          - containerPort: 5432
+            protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - /usr/libexec/check-container
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: 512Mi
+          securityContext:
+            capabilities: {}
+            privileged: false
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/pgsql/data
+            name: inventory-database-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: inventory-database-data
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - postgresql
+        from:
+          kind: ImageStreamTag
+          name: postgresql:10
+          namespace: openshift
+        lastTriggeredImage: image-registry.openshift-image-registry.svc:5000/openshift/postgresql@sha256:2a2f1fe2ed8627cae3daa9194d555b689ac23c1d08ca0535806ab34a1f8070be
+      type: ImageChange
+    - type: ConfigChange
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      app.openshift.io/connects-to: order-database
+      app.openshift.io/vcs-ref: ocp-4.5
+      app.openshift.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+      app.quarkus.io/build-timestamp: 2021-01-21 - 02:03:40 +0000
+      app.quarkus.io/commit-id: 17acc97cebf269dccdf513379b2ae964179a127c
+      app.quarkus.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+    labels:
+      app.kubernetes.io/name: order
+      app.kubernetes.io/part-of: order
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+      app.openshift.io/runtime: quarkus
+    name: order
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      app.kubernetes.io/name: order
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          app.openshift.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+          app.quarkus.io/build-timestamp: 2021-01-21 - 02:03:40 +0000
+          app.quarkus.io/commit-id: 17acc97cebf269dccdf513379b2ae964179a127c
+          app.quarkus.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/name: order
+          app.kubernetes.io/version: 1.0-SNAPSHOT
+          app.openshift.io/runtime: quarkus
+        namespace: ${PROJECT}
+      spec:
+        containers:
+        - args:
+          - -jar
+          - /deployments/order-1.0-SNAPSHOT-runner.jar
+          - -cp
+          - /deployments/lib/io.quarkus.quarkus-security-runtime-spi-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-development-mode-spi-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.security.quarkus-security-1.1.2.Final-redhat-00001.jar:/deployments/lib/jakarta.el.jakarta.el-api-3.0.3.redhat-00002.jar:/deployments/lib/jakarta.interceptor.jakarta.interceptor-api-1.2.5.redhat-00002.jar:/deployments/lib/jakarta.enterprise.jakarta.enterprise.cdi-api-2.0.2.redhat-00002.jar:/deployments/lib/io.vertx.vertx-web-common-3.9.2.redhat-00001.jar:/deployments/lib/io.vertx.vertx-auth-common-3.9.2.redhat-00001.jar:/deployments/lib/io.vertx.vertx-bridge-common-3.9.2.redhat-00001.jar:/deployments/lib/io.vertx.vertx-web-3.9.2.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-vertx-http-1.7.5.Final-redhat-00007.jar:/deployments/lib/jakarta.transaction.jakarta.transaction-api-1.3.3.redhat-00002.jar:/deployments/lib/io.quarkus.arc.arc-1.7.5.Final-redhat-00007.jar:/deployments/lib/org.eclipse.microprofile.context-propagation.microprofile-context-propagation-api-1.0.1.redhat-00002.jar:/deployments/lib/io.quarkus.quarkus-arc-1.7.5.Final-redhat-00007.jar:/deployments/lib/org.jboss.spec.javax.ws.rs.jboss-jaxrs-api_2.1_spec-2.0.1.Final-redhat-00001.jar:/deployments/lib/org.jboss.spec.javax.xml.bind.jboss-jaxb-api_2.3_spec-2.0.0.Final-redhat-00001.jar:/deployments/lib/org.jboss.resteasy.resteasy-core-spi-4.5.6.Final-redhat-00004.jar:/deployments/lib/com.ibm.async.asyncutil-0.1.0.redhat-00002.jar:/deployments/lib/org.eclipse.microprofile.config.microprofile-config-api-1.4.0.redhat-00005.jar:/deployments/lib/org.jboss.resteasy.resteasy-core-4.5.6.Final-redhat-00004.jar:/deployments/lib/com.sun.activation.jakarta.activation-1.2.1.redhat-00002.jar:/deployments/lib/io.quarkus.quarkus-resteasy-common-1.7.5.Final-redhat-00007.jar:/deployments/lib/jakarta.validation.jakarta.validation-api-2.0.2.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-resteasy-server-common-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-resteasy-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.netty.netty-common-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-buffer-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-transport-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-codec-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-handler-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-codec-socks-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-handler-proxy-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-codec-http-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-codec-http2-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-resolver-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-codec-dns-4.1.49.Final-redhat-00001.jar:/deployments/lib/io.netty.netty-resolver-dns-4.1.49.Final-redhat-00001.jar:/deployments/lib/com.fasterxml.jackson.core.jackson-core-2.11.2.redhat-00002.jar:/deployments/lib/com.fasterxml.jackson.core.jackson-annotations-2.11.2.redhat-00002.jar:/deployments/lib/com.fasterxml.jackson.core.jackson-databind-2.11.2.redhat-00002.jar:/deployments/lib/io.vertx.vertx-core-3.9.2.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-kubernetes-client-internal-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-openshift-1.7.5.Final-redhat-00007.jar:/deployments/lib/org.eclipse.yasson-1.0.8.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-jsonp-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-jsonb-1.7.5.Final-redhat-00007.jar:/deployments/lib/org.glassfish.jakarta.json-1.1.6.redhat-00003.jar:/deployments/lib/jakarta.json.bind.jakarta.json.bind-api-1.0.2.redhat-00003.jar:/deployments/lib/org.jboss.logging.jboss-logging-3.3.2.Final-redhat-00001.jar:/deployments/lib/org.jboss.resteasy.resteasy-json-binding-provider-4.5.6.Final-redhat-00004.jar:/deployments/lib/org.jboss.resteasy.resteasy-json-p-provider-4.5.6.Final-redhat-00004.jar:/deployments/lib/commons-io.commons-io-2.7.0.redhat-00003.jar:/deployments/lib/io.quarkus.quarkus-resteasy-jsonb-1.7.5.Final-redhat-00007.jar:/deployments/lib/jakarta.annotation.jakarta.annotation-api-1.3.5.redhat-00002.jar:/deployments/lib/jakarta.inject.jakarta.inject-api-1.0.0.redhat-00002.jar:/deployments/lib/io.smallrye.common.smallrye-common-annotation-1.1.0.redhat-00001.jar:/deployments/lib/io.smallrye.config.smallrye-config-common-1.8.5.redhat-00001.jar:/deployments/lib/io.smallrye.common.smallrye-common-function-1.1.0.redhat-00001.jar:/deployments/lib/io.smallrye.common.smallrye-common-expression-1.1.0.redhat-00001.jar:/deployments/lib/io.smallrye.common.smallrye-common-constraint-1.1.0.redhat-00001.jar:/deployments/lib/io.smallrye.config.smallrye-config-1.8.5.redhat-00001.jar:/deployments/lib/org.jboss.logmanager.jboss-logmanager-embedded-1.0.4.redhat-00003.jar:/deployments/lib/org.jboss.logging.jboss-logging-annotations-2.1.0.Final-redhat-00001.jar:/deployments/lib/org.jboss.threads.jboss-threads-3.1.1.Final-redhat-00001.jar:/deployments/lib/org.slf4j.slf4j-api-1.7.30.redhat-00001.jar:/deployments/lib/org.jboss.slf4j.slf4j-jboss-logging-1.2.0.Final-redhat-00001.jar:/deployments/lib/org.graalvm.sdk.graal-sdk-20.1.0.2-0-redhat-00005.jar:/deployments/lib/org.wildfly.common.wildfly-common-1.5.4.Final-format-001-redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-bootstrap-runner-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-core-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.smallrye.reactive.mutiny-0.7.0.redhat-00001.jar:/deployments/lib/io.smallrye.smallrye-context-propagation-api-1.0.13.redhat-00001.jar:/deployments/lib/io.smallrye.smallrye-context-propagation-1.0.13.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-smallrye-context-propagation-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.smallrye.reactive.mutiny-context-propagation-0.7.0.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-mutiny-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-netty-1.7.5.Final-redhat-00007.jar:/deployments/lib/io.quarkus.quarkus-vertx-core-1.7.5.Final-redhat-00007.jar:/deployments/lib/org.eclipse.microprofile.reactive-streams-operators.microprofile-reactive-streams-operators-api-1.0.1.redhat-00001.jar:/deployments/lib/org.eclipse.microprofile.reactive-streams-operators.microprofile-reactive-streams-operators-core-1.0.1.redhat-00001.jar:/deployments/lib/io.smallrye.reactive.mutiny-reactive-streams-operators-0.7.0.redhat-00001.jar:/deployments/lib/io.quarkus.quarkus-mutiny-reactive-streams-operators-1.7.5.Final-redhat-00007.jar:/deployments/lib/org.mongodb.bson-4.1.0.jar:/deployments/lib/org.mongodb.mongodb-driver-core-4.1.0.jar:/deployments/lib/org.mongodb.mongodb-driver-sync-4.1.0.jar:/deployments/lib/org.reactivestreams.reactive-streams-1.0.3.redhat-00003.jar:/deployments/lib/org.mongodb.mongodb-driver-reactivestreams-4.1.0.jar:/deployments/lib/net.java.dev.jna.jna-5.3.1.jar:/deployments/lib/org.mongodb.mongodb-crypt-1.0.1.jar:/deployments/lib/io.quarkus.quarkus-mongodb-client-1.7.5.Final.jar
+          - -Dquarkus.http.host=0.0.0.0
+          - -Djava.util.logging.manager=org.jboss.logmanager.LogManager
+          command:
+          - java
+          env:
+          - name: KUBERNETES_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+          - name: JAVA_APP_JAR
+            value: /deployments/order-1.0-SNAPSHOT-runner.jar
+          image: image-registry.openshift-image-registry.svc:5000/${PROJECT}/order:initial
+          imagePullPolicy: IfNotPresent
+          name: order
+          ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        serviceAccount: order
+        serviceAccountName: order
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - order
+        from:
+          kind: ImageStreamTag
+          name: order:1.0-SNAPSHOT
+          namespace: ${PROJECT}
+        lastTriggeredImage: image-registry.openshift-image-registry.svc:5000/${PROJECT}/order:initial
+      type: ImageChange
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    labels:
+      app: order-database
+      app.kubernetes.io/component: order-database
+      app.kubernetes.io/instance: order-database
+      app.kubernetes.io/part-of: order
+      app.openshift.io/runtime: mongodb
+    name: order-database
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      deploymentconfig: order-database
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          deploymentconfig: order-database
+      spec:
+        containers:
+        - image: mongo@sha256:f1f9bb2365e4226b50b4781603636535c82fb73be2e477b877d9bd2e907953d7
+          imagePullPolicy: IfNotPresent
+          name: order-database
+          ports:
+          - containerPort: 27017
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /data/configdb
+            name: order-database-volume-1
+          - mountPath: /data/db
+            name: order-database-volume-2
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: order-database-volume-1
+        - emptyDir: {}
+          name: order-database-volume-2
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - order-database
+        from:
+          kind: ImageStreamTag
+          name: order-database:4.0
+          namespace: ${PROJECT}
+        lastTriggeredImage: mongo@sha256:f1f9bb2365e4226b50b4781603636535c82fb73be2e477b877d9bd2e907953d7
+      type: ImageChange
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      app.openshift.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+      app.quarkus.io/build-timestamp: 2021-01-21 - 01:56:00 +0000
+      app.quarkus.io/commit-id: 17acc97cebf269dccdf513379b2ae964179a127c
+      app.quarkus.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+    creationTimestamp: "2021-01-21T01:56:11Z"
+    labels:
+      app.kubernetes.io/name: cart
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+      app.openshift.io/runtime: quarkus
+    name: cart
+    namespace: ${PROJECT}
+  spec:
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: cart:1.0-SNAPSHOT
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      binary: {}
+      type: Binary
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: openjdk-11:latest
+      type: Source
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewBuild
+    creationTimestamp: "2021-01-21T01:41:34Z"
+    labels:
+      app: catalog
+    name: catalog
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: catalog:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      binary: {}
+      type: Binary
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: openjdk-11:latest
+      type: Source
+    successfulBuildsHistoryLimit: 5
+    triggers:
+    - github:
+        secret: -NZfHcVYOKAqcbMbaj0M
+      type: GitHub
+    - generic:
+        secret: 7Sj3D9zpXauCfgphED7a
+      type: Generic
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      app.kubernetes.io/component: coolstore-ui
+      app.kubernetes.io/instance: coolstore-ui
+      app.kubernetes.io/name: nodejs
+      app.openshift.io/runtime: nodejs
+      project: coolstore-ui
+      provider: nodeshift
+      version: 1.0.0
+    name: coolstore-ui-s2i
+    namespace: ${PROJECT}
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: coolstore-ui:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      binary: {}
+      type: Binary
+    strategy:
+      sourceStrategy:
+        from:
+          kind: DockerImage
+          name: registry.access.redhat.com/ubi8/nodejs-10:latest
+        incremental: false
+      type: Source
+    successfulBuildsHistoryLimit: 5
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      app.openshift.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+      app.quarkus.io/build-timestamp: 2021-01-21 - 01:34:53 +0000
+      app.quarkus.io/commit-id: 17acc97cebf269dccdf513379b2ae964179a127c
+      app.quarkus.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+    labels:
+      app.kubernetes.io/name: inventory
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+      app.openshift.io/runtime: quarkus
+    name: inventory
+  spec:
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: inventory:1.0-SNAPSHOT
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      binary: {}
+      type: Binary
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: openjdk-11:latest
+      type: Source
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      app.openshift.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+      app.quarkus.io/build-timestamp: 2021-01-21 - 02:03:40 +0000
+      app.quarkus.io/commit-id: 17acc97cebf269dccdf513379b2ae964179a127c
+      app.quarkus.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+    labels:
+      app.kubernetes.io/name: order
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+      app.openshift.io/runtime: quarkus
+    name: order
+    namespace: ${PROJECT}
+  spec:
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: order:1.0-SNAPSHOT
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      binary: {}
+      type: Binary
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: openjdk-11:latest
+      type: Source
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      openshift.io/image.dockerRepositoryCheck: "2021-01-21T01:44:36Z"
+    creationTimestamp: "2021-01-21T01:44:34Z"
+    generation: 2
+    labels:
+      app: datagrid-service
+      app.kubernetes.io/component: datagrid-service
+      app.kubernetes.io/instance: datagrid-service
+    managedFields:
+    - apiVersion: image.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:openshift.io/generated-by: {}
+          f:labels:
+            .: {}
+            f:app: {}
+            f:app.kubernetes.io/component: {}
+            f:app.kubernetes.io/instance: {}
+        f:spec:
+          f:tags:
+            .: {}
+            k:{"name":"10.0.0.Beta3"}:
+              .: {}
+              f:annotations:
+                .: {}
+                f:openshift.io/imported-from: {}
+              f:from:
+                .: {}
+                f:kind: {}
+                f:name: {}
+              f:generation: {}
+              f:importPolicy: {}
+              f:name: {}
+              f:referencePolicy:
+                .: {}
+                f:type: {}
+      manager: oc
+      operation: Update
+      time: "2021-01-21T01:44:34Z"
+    name: datagrid-service
+    namespace: ${PROJECT}
+    resourceVersion: "748803"
+    selfLink: /apis/image.openshift.io/v1/namespaces/${PROJECT}/imagestreams/datagrid-service
+    uid: 4cdb527a-000d-4ea2-802c-9680a13e4ff2
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: jboss/infinispan-server:10.0.0.Beta3
+      from:
+        kind: DockerImage
+        name: jboss/infinispan-server:10.0.0.Beta3
+      generation: 2
+      importPolicy: {}
+      name: 10.0.0.Beta3
+      referencePolicy:
+        type: Source
+  status:
+    dockerImageRepository: image-registry.openshift-image-registry.svc:5000/${PROJECT}/datagrid-service
+    tags:
+    - items:
+      - created: "2021-01-21T01:44:36Z"
+        dockerImageReference: jboss/infinispan-server@sha256:e273ee003839cba43206f7efcf72724bdb13baef36956088a1871cb2a5278fc0
+        generation: 2
+        image: sha256:e273ee003839cba43206f7efcf72724bdb13baef36956088a1871cb2a5278fc0
+      tag: 10.0.0.Beta3
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      openshift.io/image.dockerRepositoryCheck: "2021-01-21T02:03:15Z"
+    creationTimestamp: "2021-01-21T02:03:13Z"
+    generation: 2
+    labels:
+      app: order-database
+      app.kubernetes.io/component: order-database
+      app.kubernetes.io/instance: order-database
+    managedFields:
+    - apiVersion: image.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:openshift.io/generated-by: {}
+          f:labels:
+            .: {}
+            f:app: {}
+            f:app.kubernetes.io/component: {}
+            f:app.kubernetes.io/instance: {}
+        f:spec:
+          f:tags:
+            .: {}
+            k:{"name":"4.0"}:
+              .: {}
+              f:annotations:
+                .: {}
+                f:openshift.io/imported-from: {}
+              f:from:
+                .: {}
+                f:kind: {}
+                f:name: {}
+              f:generation: {}
+              f:importPolicy: {}
+              f:name: {}
+              f:referencePolicy:
+                .: {}
+                f:type: {}
+      manager: oc
+      operation: Update
+      time: "2021-01-21T02:03:13Z"
+    name: order-database
+    namespace: ${PROJECT}
+    resourceVersion: "766540"
+    selfLink: /apis/image.openshift.io/v1/namespaces/${PROJECT}/imagestreams/order-database
+    uid: 9dbf70a9-b549-41a9-ba96-b6a7fcc8d94d
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: mongo:4.0
+      from:
+        kind: DockerImage
+        name: mongo:4.0
+      generation: 2
+      importPolicy: {}
+      name: "4.0"
+      referencePolicy:
+        type: Source
+  status:
+    dockerImageRepository: image-registry.openshift-image-registry.svc:5000/${PROJECT}/order-database
+    tags:
+    - items:
+      - created: "2021-01-21T02:03:15Z"
+        dockerImageReference: mongo@sha256:f1f9bb2365e4226b50b4781603636535c82fb73be2e477b877d9bd2e907953d7
+        generation: 2
+        image: sha256:f1f9bb2365e4226b50b4781603636535c82fb73be2e477b877d9bd2e907953d7
+      tag: "4.0"
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      app.openshift.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+      app.quarkus.io/build-timestamp: 2021-01-21 - 01:56:00 +0000
+      app.quarkus.io/commit-id: 17acc97cebf269dccdf513379b2ae964179a127c
+      app.quarkus.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+      openshift.io/host.generated: "true"
+    creationTimestamp: "2021-01-21T01:56:52Z"
+    labels:
+      app.kubernetes.io/name: cart
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+      app.openshift.io/runtime: quarkus
+    managedFields:
+    - apiVersion: route.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:app.openshift.io/vcs-url: {}
+            f:app.quarkus.io/build-timestamp: {}
+            f:app.quarkus.io/commit-id: {}
+            f:app.quarkus.io/vcs-url: {}
+          f:labels:
+            .: {}
+            f:app.kubernetes.io/name: {}
+            f:app.kubernetes.io/version: {}
+            f:app.openshift.io/runtime: {}
+        f:spec:
+          f:path: {}
+          f:port:
+            .: {}
+            f:targetPort: {}
+          f:to:
+            f:kind: {}
+            f:name: {}
+            f:weight: {}
+          f:wildcardPolicy: {}
+      manager: okhttp
+      operation: Update
+      time: "2021-01-21T01:56:52Z"
+    - apiVersion: route.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:status:
+          f:ingress: {}
+      manager: openshift-router
+      operation: Update
+      time: "2021-01-21T01:56:52Z"
+    name: cart
+    namespace: ${PROJECT}
+    resourceVersion: "760348"
+    selfLink: /apis/route.openshift.io/v1/namespaces/${PROJECT}/routes/cart
+    uid: bc5593a9-bb96-4098-bb0c-1b2030874840
+  spec:
+    host: cart-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
+    path: /
+    port:
+      targetPort: 8080
+    to:
+      kind: Service
+      name: cart
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: "2021-01-21T01:56:52Z"
+        status: "True"
+        type: Admitted
+      host: cart-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
+      routerCanonicalHostname: apps.cluster-af96.af96.sandbox1118.opentlc.com
+      routerName: default
+      wildcardPolicy: None
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    creationTimestamp: "2021-01-21T01:43:46Z"
+    labels:
+      app: catalog
+      app.kubernetes.io/component: catalog
+      app.kubernetes.io/instance: catalog
+    managedFields:
+    - apiVersion: route.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:labels:
+            .: {}
+            f:app: {}
+            f:app.kubernetes.io/component: {}
+            f:app.kubernetes.io/instance: {}
+        f:spec:
+          f:port:
+            .: {}
+            f:targetPort: {}
+          f:to:
+            f:kind: {}
+            f:name: {}
+            f:weight: {}
+          f:wildcardPolicy: {}
+      manager: oc
+      operation: Update
+      time: "2021-01-21T01:43:46Z"
+    - apiVersion: route.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:status:
+          f:ingress: {}
+      manager: openshift-router
+      operation: Update
+      time: "2021-01-21T01:43:47Z"
+    name: catalog
+    namespace: user1-cloudnativeapps
+    resourceVersion: "748165"
+    selfLink: /apis/route.openshift.io/v1/namespaces/user1-cloudnativeapps/routes/catalog
+    uid: 24a481eb-c68d-411e-9633-582e456d1bad
+  spec:
+    host: catalog-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: catalog
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: "2021-01-21T01:43:47Z"
+        status: "True"
+        type: Admitted
+      host: catalog-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
+      routerCanonicalHostname: apps.cluster-af96.af96.sandbox1118.opentlc.com
+      routerName: default
+      wildcardPolicy: None
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    creationTimestamp: "2021-01-21T02:05:36Z"
+    labels:
+      app.kubernetes.io/component: coolstore-ui
+      app.kubernetes.io/instance: coolstore-ui
+      app.kubernetes.io/name: nodejs
+      app.openshift.io/runtime: nodejs
+      project: coolstore-ui
+      provider: nodeshift
+      version: 1.0.0
+    managedFields:
+    - apiVersion: route.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:labels:
+            .: {}
+            f:app.kubernetes.io/component: {}
+            f:app.kubernetes.io/instance: {}
+            f:app.kubernetes.io/name: {}
+            f:app.openshift.io/runtime: {}
+            f:project: {}
+            f:provider: {}
+            f:version: {}
+        f:spec:
+          f:port:
+            .: {}
+            f:targetPort: {}
+          f:to:
+            f:kind: {}
+            f:name: {}
+            f:weight: {}
+          f:wildcardPolicy: {}
+      manager: oc
+      operation: Update
+      time: "2021-01-21T02:05:36Z"
+    - apiVersion: route.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:status:
+          f:ingress: {}
+      manager: openshift-router
+      operation: Update
+      time: "2021-01-21T02:05:37Z"
+    name: coolstore-ui
+    namespace: user1-cloudnativeapps
+    resourceVersion: "768894"
+    selfLink: /apis/route.openshift.io/v1/namespaces/user1-cloudnativeapps/routes/coolstore-ui
+    uid: 9d34ed60-6b85-4c5d-9117-94c3755aa4bf
+  spec:
+    host: coolstore-ui-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
+    port:
+      targetPort: http
+    to:
+      kind: Service
+      name: coolstore-ui
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: "2021-01-21T02:05:37Z"
+        status: "True"
+        type: Admitted
+      host: coolstore-ui-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
+      routerCanonicalHostname: apps.cluster-af96.af96.sandbox1118.opentlc.com
+      routerName: default
+      wildcardPolicy: None
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      app.openshift.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+      app.quarkus.io/build-timestamp: 2021-01-21 - 01:34:53 +0000
+      app.quarkus.io/commit-id: 17acc97cebf269dccdf513379b2ae964179a127c
+      app.quarkus.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+      openshift.io/host.generated: "true"
+    creationTimestamp: "2021-01-21T01:36:45Z"
+    labels:
+      app.kubernetes.io/name: inventory
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+      app.openshift.io/runtime: quarkus
+    managedFields:
+    - apiVersion: route.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:app.openshift.io/vcs-url: {}
+            f:app.quarkus.io/build-timestamp: {}
+            f:app.quarkus.io/commit-id: {}
+            f:app.quarkus.io/vcs-url: {}
+          f:labels:
+            .: {}
+            f:app.kubernetes.io/name: {}
+            f:app.kubernetes.io/version: {}
+            f:app.openshift.io/runtime: {}
+        f:spec:
+          f:path: {}
+          f:port:
+            .: {}
+            f:targetPort: {}
+          f:to:
+            f:kind: {}
+            f:name: {}
+            f:weight: {}
+          f:wildcardPolicy: {}
+      manager: okhttp
+      operation: Update
+      time: "2021-01-21T01:36:45Z"
+    - apiVersion: route.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:status:
+          f:ingress: {}
+      manager: openshift-router
+      operation: Update
+      time: "2021-01-21T01:36:45Z"
+    name: inventory
+    namespace: user1-cloudnativeapps
+    resourceVersion: "740919"
+    selfLink: /apis/route.openshift.io/v1/namespaces/user1-cloudnativeapps/routes/inventory
+    uid: b7aa3553-e130-463a-8d18-fdcbfa25a599
+  spec:
+    host: inventory-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
+    path: /
+    port:
+      targetPort: 8080
+    to:
+      kind: Service
+      name: inventory
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: "2021-01-21T01:36:45Z"
+        status: "True"
+        type: Admitted
+      host: inventory-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
+      routerCanonicalHostname: apps.cluster-af96.af96.sandbox1118.opentlc.com
+      routerName: default
+      wildcardPolicy: None
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      app.openshift.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+      app.quarkus.io/build-timestamp: 2021-01-21 - 02:03:40 +0000
+      app.quarkus.io/commit-id: 17acc97cebf269dccdf513379b2ae964179a127c
+      app.quarkus.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
+      openshift.io/host.generated: "true"
+    creationTimestamp: "2021-01-21T02:04:33Z"
+    labels:
+      app.kubernetes.io/name: order
+      app.kubernetes.io/version: 1.0-SNAPSHOT
+      app.openshift.io/runtime: quarkus
+    managedFields:
+    - apiVersion: route.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:app.openshift.io/vcs-url: {}
+            f:app.quarkus.io/build-timestamp: {}
+            f:app.quarkus.io/commit-id: {}
+            f:app.quarkus.io/vcs-url: {}
+          f:labels:
+            .: {}
+            f:app.kubernetes.io/name: {}
+            f:app.kubernetes.io/version: {}
+            f:app.openshift.io/runtime: {}
+        f:spec:
+          f:path: {}
+          f:port:
+            .: {}
+            f:targetPort: {}
+          f:to:
+            f:kind: {}
+            f:name: {}
+            f:weight: {}
+          f:wildcardPolicy: {}
+      manager: okhttp
+      operation: Update
+      time: "2021-01-21T02:04:33Z"
+    - apiVersion: route.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:status:
+          f:ingress: {}
+      manager: openshift-router
+      operation: Update
+      time: "2021-01-21T02:04:33Z"
+    name: order
+    namespace: user1-cloudnativeapps
+    resourceVersion: "768094"
+    selfLink: /apis/route.openshift.io/v1/namespaces/user1-cloudnativeapps/routes/order
+    uid: 12494198-abbe-4948-85a6-04c8144dab08
+  spec:
+    host: order-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
+    path: /
+    port:
+      targetPort: 8080
+    to:
+      kind: Service
+      name: order
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: "2021-01-21T02:04:33Z"
+        status: "True"
+        type: Admitted
+      host: order-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
+      routerCanonicalHostname: apps.cluster-af96.af96.sandbox1118.opentlc.com
+      routerName: default
+      wildcardPolicy: None
+
