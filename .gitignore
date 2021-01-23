@@ -30,3 +30,4 @@ nbdist/
 
 .DS_Store
 .m2/
+secrets/
