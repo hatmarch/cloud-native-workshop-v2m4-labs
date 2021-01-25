@@ -12,6 +12,40 @@ parameters:
   required: true
 objects:
 - apiVersion: v1
+  data:
+    database-name: aW52ZW50b3J5
+    database-password: bXlzZWNyZXRwYXNzd29yZA==
+    database-user: aW52ZW50b3J5
+  kind: Secret
+  metadata:
+    annotations:
+      template.openshift.io/expose-database_name: '{.data[''database-name'']}'
+      template.openshift.io/expose-password: '{.data[''database-password'']}'
+      template.openshift.io/expose-username: '{.data[''database-user'']}'
+    labels:
+      template: postgresql-ephemeral-template
+      template.openshift.io/template-instance-owner: 25afcf30-7ff0-43a2-9242-588efcd10b79
+    name: inventory-database
+    namespace: ${PROJECT}
+  type: Opaque
+- apiVersion: v1
+  data:
+    database-name: Y2F0YWxvZw==
+    database-password: bXlzZWNyZXRwYXNzd29yZA==
+    database-user: Y2F0YWxvZw==
+  kind: Secret
+  metadata:
+    annotations:
+      template.openshift.io/expose-database_name: '{.data[''database-name'']}'
+      template.openshift.io/expose-password: '{.data[''database-password'']}'
+      template.openshift.io/expose-username: '{.data[''database-user'']}'
+    labels:
+      template: postgresql-ephemeral-template
+      template.openshift.io/template-instance-owner: eb556560-0ca8-4c46-879e-14c52945e1aa
+    name: catalog-database
+    namespace: ${PROJECT}
+  type: Opaque
+- apiVersion: v1
   kind: Service
   metadata:
     annotations:
@@ -573,6 +607,13 @@ objects:
         - image: image-registry.openshift-image-registry.svc:5000/${PROJECT}/coolstore-ui:initial
           imagePullPolicy: Always
           name: coolstore-ui
+          env:
+          # this must be set for the coolstore to point to the proper backend services
+          - name: OPENSHIFT_BUILD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
           ports:
           - containerPort: 8080
             name: http
@@ -1210,51 +1251,11 @@ objects:
     annotations:
       openshift.io/generated-by: OpenShiftNewApp
       openshift.io/image.dockerRepositoryCheck: "2021-01-21T01:44:36Z"
-    creationTimestamp: "2021-01-21T01:44:34Z"
-    generation: 2
     labels:
       app: datagrid-service
       app.kubernetes.io/component: datagrid-service
       app.kubernetes.io/instance: datagrid-service
-    managedFields:
-    - apiVersion: image.openshift.io/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:annotations:
-            .: {}
-            f:openshift.io/generated-by: {}
-          f:labels:
-            .: {}
-            f:app: {}
-            f:app.kubernetes.io/component: {}
-            f:app.kubernetes.io/instance: {}
-        f:spec:
-          f:tags:
-            .: {}
-            k:{"name":"10.0.0.Beta3"}:
-              .: {}
-              f:annotations:
-                .: {}
-                f:openshift.io/imported-from: {}
-              f:from:
-                .: {}
-                f:kind: {}
-                f:name: {}
-              f:generation: {}
-              f:importPolicy: {}
-              f:name: {}
-              f:referencePolicy:
-                .: {}
-                f:type: {}
-      manager: oc
-      operation: Update
-      time: "2021-01-21T01:44:34Z"
     name: datagrid-service
-    namespace: ${PROJECT}
-    resourceVersion: "748803"
-    selfLink: /apis/image.openshift.io/v1/namespaces/${PROJECT}/imagestreams/datagrid-service
-    uid: 4cdb527a-000d-4ea2-802c-9680a13e4ff2
   spec:
     lookupPolicy:
       local: false
@@ -1269,66 +1270,18 @@ objects:
       name: 10.0.0.Beta3
       referencePolicy:
         type: Source
-  status:
-    dockerImageRepository: image-registry.openshift-image-registry.svc:5000/${PROJECT}/datagrid-service
-    tags:
-    - items:
-      - created: "2021-01-21T01:44:36Z"
-        dockerImageReference: jboss/infinispan-server@sha256:e273ee003839cba43206f7efcf72724bdb13baef36956088a1871cb2a5278fc0
-        generation: 2
-        image: sha256:e273ee003839cba43206f7efcf72724bdb13baef36956088a1871cb2a5278fc0
-      tag: 10.0.0.Beta3
 - apiVersion: image.openshift.io/v1
   kind: ImageStream
   metadata:
     annotations:
       openshift.io/generated-by: OpenShiftNewApp
       openshift.io/image.dockerRepositoryCheck: "2021-01-21T02:03:15Z"
-    creationTimestamp: "2021-01-21T02:03:13Z"
-    generation: 2
     labels:
       app: order-database
       app.kubernetes.io/component: order-database
       app.kubernetes.io/instance: order-database
-    managedFields:
-    - apiVersion: image.openshift.io/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:annotations:
-            .: {}
-            f:openshift.io/generated-by: {}
-          f:labels:
-            .: {}
-            f:app: {}
-            f:app.kubernetes.io/component: {}
-            f:app.kubernetes.io/instance: {}
-        f:spec:
-          f:tags:
-            .: {}
-            k:{"name":"4.0"}:
-              .: {}
-              f:annotations:
-                .: {}
-                f:openshift.io/imported-from: {}
-              f:from:
-                .: {}
-                f:kind: {}
-                f:name: {}
-              f:generation: {}
-              f:importPolicy: {}
-              f:name: {}
-              f:referencePolicy:
-                .: {}
-                f:type: {}
-      manager: oc
-      operation: Update
-      time: "2021-01-21T02:03:13Z"
     name: order-database
     namespace: ${PROJECT}
-    resourceVersion: "766540"
-    selfLink: /apis/image.openshift.io/v1/namespaces/${PROJECT}/imagestreams/order-database
-    uid: 9dbf70a9-b549-41a9-ba96-b6a7fcc8d94d
   spec:
     lookupPolicy:
       local: false
@@ -1343,15 +1296,6 @@ objects:
       name: "4.0"
       referencePolicy:
         type: Source
-  status:
-    dockerImageRepository: image-registry.openshift-image-registry.svc:5000/${PROJECT}/order-database
-    tags:
-    - items:
-      - created: "2021-01-21T02:03:15Z"
-        dockerImageReference: mongo@sha256:f1f9bb2365e4226b50b4781603636535c82fb73be2e477b877d9bd2e907953d7
-        generation: 2
-        image: sha256:f1f9bb2365e4226b50b4781603636535c82fb73be2e477b877d9bd2e907953d7
-      tag: "4.0"
 - apiVersion: route.openshift.io/v1
   kind: Route
   metadata:
@@ -1361,55 +1305,13 @@ objects:
       app.quarkus.io/commit-id: 17acc97cebf269dccdf513379b2ae964179a127c
       app.quarkus.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
       openshift.io/host.generated: "true"
-    creationTimestamp: "2021-01-21T01:56:52Z"
     labels:
       app.kubernetes.io/name: cart
       app.kubernetes.io/version: 1.0-SNAPSHOT
       app.openshift.io/runtime: quarkus
-    managedFields:
-    - apiVersion: route.openshift.io/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:annotations:
-            .: {}
-            f:app.openshift.io/vcs-url: {}
-            f:app.quarkus.io/build-timestamp: {}
-            f:app.quarkus.io/commit-id: {}
-            f:app.quarkus.io/vcs-url: {}
-          f:labels:
-            .: {}
-            f:app.kubernetes.io/name: {}
-            f:app.kubernetes.io/version: {}
-            f:app.openshift.io/runtime: {}
-        f:spec:
-          f:path: {}
-          f:port:
-            .: {}
-            f:targetPort: {}
-          f:to:
-            f:kind: {}
-            f:name: {}
-            f:weight: {}
-          f:wildcardPolicy: {}
-      manager: okhttp
-      operation: Update
-      time: "2021-01-21T01:56:52Z"
-    - apiVersion: route.openshift.io/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:status:
-          f:ingress: {}
-      manager: openshift-router
-      operation: Update
-      time: "2021-01-21T01:56:52Z"
     name: cart
     namespace: ${PROJECT}
-    resourceVersion: "760348"
-    selfLink: /apis/route.openshift.io/v1/namespaces/${PROJECT}/routes/cart
-    uid: bc5593a9-bb96-4098-bb0c-1b2030874840
   spec:
-    host: cart-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
     path: /
     port:
       targetPort: 8080
@@ -1418,63 +1320,18 @@ objects:
       name: cart
       weight: 100
     wildcardPolicy: None
-  status:
-    ingress:
-    - conditions:
-      - lastTransitionTime: "2021-01-21T01:56:52Z"
-        status: "True"
-        type: Admitted
-      host: cart-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
-      routerCanonicalHostname: apps.cluster-af96.af96.sandbox1118.opentlc.com
-      routerName: default
-      wildcardPolicy: None
 - apiVersion: route.openshift.io/v1
   kind: Route
   metadata:
     annotations:
       openshift.io/host.generated: "true"
-    creationTimestamp: "2021-01-21T01:43:46Z"
     labels:
       app: catalog
       app.kubernetes.io/component: catalog
       app.kubernetes.io/instance: catalog
-    managedFields:
-    - apiVersion: route.openshift.io/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:labels:
-            .: {}
-            f:app: {}
-            f:app.kubernetes.io/component: {}
-            f:app.kubernetes.io/instance: {}
-        f:spec:
-          f:port:
-            .: {}
-            f:targetPort: {}
-          f:to:
-            f:kind: {}
-            f:name: {}
-            f:weight: {}
-          f:wildcardPolicy: {}
-      manager: oc
-      operation: Update
-      time: "2021-01-21T01:43:46Z"
-    - apiVersion: route.openshift.io/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:status:
-          f:ingress: {}
-      manager: openshift-router
-      operation: Update
-      time: "2021-01-21T01:43:47Z"
     name: catalog
-    namespace: user1-cloudnativeapps
-    resourceVersion: "748165"
-    selfLink: /apis/route.openshift.io/v1/namespaces/user1-cloudnativeapps/routes/catalog
-    uid: 24a481eb-c68d-411e-9633-582e456d1bad
+    namespace: ${PROJECT}
   spec:
-    host: catalog-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
     port:
       targetPort: 8080-tcp
     to:
@@ -1482,22 +1339,11 @@ objects:
       name: catalog
       weight: 100
     wildcardPolicy: None
-  status:
-    ingress:
-    - conditions:
-      - lastTransitionTime: "2021-01-21T01:43:47Z"
-        status: "True"
-        type: Admitted
-      host: catalog-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
-      routerCanonicalHostname: apps.cluster-af96.af96.sandbox1118.opentlc.com
-      routerName: default
-      wildcardPolicy: None
 - apiVersion: route.openshift.io/v1
   kind: Route
   metadata:
     annotations:
       openshift.io/host.generated: "true"
-    creationTimestamp: "2021-01-21T02:05:36Z"
     labels:
       app.kubernetes.io/component: coolstore-ui
       app.kubernetes.io/instance: coolstore-ui
@@ -1506,47 +1352,9 @@ objects:
       project: coolstore-ui
       provider: nodeshift
       version: 1.0.0
-    managedFields:
-    - apiVersion: route.openshift.io/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:labels:
-            .: {}
-            f:app.kubernetes.io/component: {}
-            f:app.kubernetes.io/instance: {}
-            f:app.kubernetes.io/name: {}
-            f:app.openshift.io/runtime: {}
-            f:project: {}
-            f:provider: {}
-            f:version: {}
-        f:spec:
-          f:port:
-            .: {}
-            f:targetPort: {}
-          f:to:
-            f:kind: {}
-            f:name: {}
-            f:weight: {}
-          f:wildcardPolicy: {}
-      manager: oc
-      operation: Update
-      time: "2021-01-21T02:05:36Z"
-    - apiVersion: route.openshift.io/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:status:
-          f:ingress: {}
-      manager: openshift-router
-      operation: Update
-      time: "2021-01-21T02:05:37Z"
     name: coolstore-ui
-    namespace: user1-cloudnativeapps
-    resourceVersion: "768894"
-    selfLink: /apis/route.openshift.io/v1/namespaces/user1-cloudnativeapps/routes/coolstore-ui
-    uid: 9d34ed60-6b85-4c5d-9117-94c3755aa4bf
+    namespace: ${PROJECT}
   spec:
-    host: coolstore-ui-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
     port:
       targetPort: http
     to:
@@ -1554,16 +1362,6 @@ objects:
       name: coolstore-ui
       weight: 100
     wildcardPolicy: None
-  status:
-    ingress:
-    - conditions:
-      - lastTransitionTime: "2021-01-21T02:05:37Z"
-        status: "True"
-        type: Admitted
-      host: coolstore-ui-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
-      routerCanonicalHostname: apps.cluster-af96.af96.sandbox1118.opentlc.com
-      routerName: default
-      wildcardPolicy: None
 - apiVersion: route.openshift.io/v1
   kind: Route
   metadata:
@@ -1573,55 +1371,13 @@ objects:
       app.quarkus.io/commit-id: 17acc97cebf269dccdf513379b2ae964179a127c
       app.quarkus.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
       openshift.io/host.generated: "true"
-    creationTimestamp: "2021-01-21T01:36:45Z"
     labels:
       app.kubernetes.io/name: inventory
       app.kubernetes.io/version: 1.0-SNAPSHOT
       app.openshift.io/runtime: quarkus
-    managedFields:
-    - apiVersion: route.openshift.io/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:annotations:
-            .: {}
-            f:app.openshift.io/vcs-url: {}
-            f:app.quarkus.io/build-timestamp: {}
-            f:app.quarkus.io/commit-id: {}
-            f:app.quarkus.io/vcs-url: {}
-          f:labels:
-            .: {}
-            f:app.kubernetes.io/name: {}
-            f:app.kubernetes.io/version: {}
-            f:app.openshift.io/runtime: {}
-        f:spec:
-          f:path: {}
-          f:port:
-            .: {}
-            f:targetPort: {}
-          f:to:
-            f:kind: {}
-            f:name: {}
-            f:weight: {}
-          f:wildcardPolicy: {}
-      manager: okhttp
-      operation: Update
-      time: "2021-01-21T01:36:45Z"
-    - apiVersion: route.openshift.io/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:status:
-          f:ingress: {}
-      manager: openshift-router
-      operation: Update
-      time: "2021-01-21T01:36:45Z"
     name: inventory
-    namespace: user1-cloudnativeapps
-    resourceVersion: "740919"
-    selfLink: /apis/route.openshift.io/v1/namespaces/user1-cloudnativeapps/routes/inventory
-    uid: b7aa3553-e130-463a-8d18-fdcbfa25a599
+    namespace: ${PROJECT}
   spec:
-    host: inventory-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
     path: /
     port:
       targetPort: 8080
@@ -1630,16 +1386,6 @@ objects:
       name: inventory
       weight: 100
     wildcardPolicy: None
-  status:
-    ingress:
-    - conditions:
-      - lastTransitionTime: "2021-01-21T01:36:45Z"
-        status: "True"
-        type: Admitted
-      host: inventory-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
-      routerCanonicalHostname: apps.cluster-af96.af96.sandbox1118.opentlc.com
-      routerName: default
-      wildcardPolicy: None
 - apiVersion: route.openshift.io/v1
   kind: Route
   metadata:
@@ -1649,55 +1395,13 @@ objects:
       app.quarkus.io/commit-id: 17acc97cebf269dccdf513379b2ae964179a127c
       app.quarkus.io/vcs-url: https://github.com/RedHat-Middleware-Workshops/cloud-native-workshop-v2m4-labs.git
       openshift.io/host.generated: "true"
-    creationTimestamp: "2021-01-21T02:04:33Z"
     labels:
       app.kubernetes.io/name: order
       app.kubernetes.io/version: 1.0-SNAPSHOT
       app.openshift.io/runtime: quarkus
-    managedFields:
-    - apiVersion: route.openshift.io/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:annotations:
-            .: {}
-            f:app.openshift.io/vcs-url: {}
-            f:app.quarkus.io/build-timestamp: {}
-            f:app.quarkus.io/commit-id: {}
-            f:app.quarkus.io/vcs-url: {}
-          f:labels:
-            .: {}
-            f:app.kubernetes.io/name: {}
-            f:app.kubernetes.io/version: {}
-            f:app.openshift.io/runtime: {}
-        f:spec:
-          f:path: {}
-          f:port:
-            .: {}
-            f:targetPort: {}
-          f:to:
-            f:kind: {}
-            f:name: {}
-            f:weight: {}
-          f:wildcardPolicy: {}
-      manager: okhttp
-      operation: Update
-      time: "2021-01-21T02:04:33Z"
-    - apiVersion: route.openshift.io/v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:status:
-          f:ingress: {}
-      manager: openshift-router
-      operation: Update
-      time: "2021-01-21T02:04:33Z"
     name: order
-    namespace: user1-cloudnativeapps
-    resourceVersion: "768094"
-    selfLink: /apis/route.openshift.io/v1/namespaces/user1-cloudnativeapps/routes/order
-    uid: 12494198-abbe-4948-85a6-04c8144dab08
+    namespace: ${PROJECT}
   spec:
-    host: order-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
     path: /
     port:
       targetPort: 8080
@@ -1706,14 +1410,4 @@ objects:
       name: order
       weight: 100
     wildcardPolicy: None
-  status:
-    ingress:
-    - conditions:
-      - lastTransitionTime: "2021-01-21T02:04:33Z"
-        status: "True"
-        type: Admitted
-      host: order-user1-cloudnativeapps.apps.cluster-af96.af96.sandbox1118.opentlc.com
-      routerCanonicalHostname: apps.cluster-af96.af96.sandbox1118.opentlc.com
-      routerName: default
-      wildcardPolicy: None
 
