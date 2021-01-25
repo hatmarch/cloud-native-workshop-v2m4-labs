@@ -1,24 +1,36 @@
-# FROM quay.io/mhildenb/crw-maven:1.3.3-b
-FROM registry.redhat.io/codeready-workspaces/stacks-dotnet-rhel8@sha256:a61038e596c0c6104ae86cf4c5af5c60a6126feefa6e6585c540de2c48b723a2 AS crw-reference
 FROM quay.io/mhildenb/demo-cache:latest as cachier
 
-FROM quay.io/mhildenb/kn-demo-shell:latest
+FROM quay.io/mhildenb/lab3-crw:2.4
 
 USER root
+
+# install stern
+RUN cd /usr/local/bin && \
+    wget https://github.com/wercker/stern/releases/download/1.11.0/stern_linux_amd64 -O /usr/local/bin/stern && \
+    chmod 755 /usr/local/bin/stern && \
+# install hey
+    wget https://mwh-demo-assets.s3-ap-southeast-2.amazonaws.com/hey_linux_amd64 -O /usr/local/bin/hey && \
+    chmod 755 /usr/local/bin/hey && \
+# install knative (existing one in /usr/bin)
+    wget -qO- https://mirror.openshift.com/pub/openshift-v4/clients/serverless/0.17.3/kn-linux-amd64-0.17.3.tar.gz | tar -zxvf - -C /usr/bin ./kn && \
+    chmod 755 /usr/bin/kn && \
+# install yq
+    wget https://github.com/mikefarah/yq/releases/download/2.4.1/yq_linux_amd64 -O /usr/local/bin/yq && \
+    chmod 755 /usr/local/bin/yq
+
+# install httpie
+RUN microdnf update && microdnf -y install dnf && \
+    dnf -y install http://ftp.pbone.net/mirror/archive.fedoraproject.org/fedora/linux/updates/26/armhfp/Packages/h/httpie-0.9.4-9.fc26.noarch.rpm && \
+    microdnf -y remove dnf && microdnf clean all
 
 # Entrypoint script looks at this file
 RUN chmod g+w /etc/group
 
 USER jboss
 
-COPY --from=crw-reference /home/jboss /home/jboss
-
 COPY --from=cachier /home/jboss/.m2 /home/jboss/m2-cache
 
 CMD [ "/bin/sh", "-c", "tail -f /dev/null" ]
-
-# Update the quarkus profile so that CRW uses the appropriate application.properties
-ENV QUARKUS_PROFILE=crw
 
 ENTRYPOINT [  "/home/jboss/entrypoint.sh" ]
 
