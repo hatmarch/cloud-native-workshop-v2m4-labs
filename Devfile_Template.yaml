@@ -2,6 +2,12 @@ apiVersion: 1.0.0
 metadata:
   # FIXME: change to the name of the user
   name: %USER%-workspace
+projects:
+  - name: coolstore
+    source:
+      location: 'https://github.com/hatmarch/cloud-native-workshop-v2m4-labs.git'
+      type: git
+      branch: ocp-4.5-post-lab3
 components:
   - id: redhat/quarkus-java11/latest
     type: chePlugin
