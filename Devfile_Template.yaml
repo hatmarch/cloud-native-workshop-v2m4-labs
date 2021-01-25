@@ -69,6 +69,12 @@ commands:
         type: exec
         command: 'mvn spring-boot:run -f ${current.project.path}'
         component: quarkus-tools
+  - name: Seed Cache
+    actions:
+      - workdir: '/home/jboss'
+        type: exec
+        command: 'cp -rf m2-cache/* .m2'
+        component: quarkus-tools
   - name: Start Debugger on 5005
     actions:
       - referenceContent: |
