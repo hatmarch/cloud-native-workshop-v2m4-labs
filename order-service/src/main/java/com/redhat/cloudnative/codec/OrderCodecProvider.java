@@ -7,7 +7,13 @@ import org.bson.codecs.configuration.CodecRegistry;
 
 public class OrderCodecProvider implements CodecProvider {
 
-    // TODO: Add Codec get method here
-    
+    // DONE: Add Codec get method here
+    @Override
+    public <T> Codec<T> get(Class<T> clazz, CodecRegistry registry) {
+        if (clazz == Order.class) {
+            return (Codec<T>) new OrderCodec();
+        }
+        return null;
+    }
 
 }
