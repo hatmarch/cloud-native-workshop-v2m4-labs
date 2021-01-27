@@ -4,9 +4,17 @@ set -euo pipefail
 
 PROJECT=${1}
 
-oc create sa cart -n ${PROJECT}
-oc create sa inventory -n ${PROJECT}
-oc create sa order -n ${PROJECT}
+oc get sa cart -n ${PROJECT} 2>/dev/null || {
+    oc create sa cart -n ${PROJECT}
+}
+
+oc get sa inventory -n ${PROJECT} 2>/dev/null || {
+    oc create sa inventory -n ${PROJECT}
+}
+
+oc get sa order -n ${PROJECT} 2>/dev/null || {
+    oc create sa order -n ${PROJECT}
+}
 
 IMAGES=( cart coolstore-ui inventory catalog order )
 
