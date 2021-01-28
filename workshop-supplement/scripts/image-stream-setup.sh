@@ -21,7 +21,7 @@ IMAGES=( cart coolstore-ui inventory catalog order )
 for IMAGE in ${IMAGES[@]}; do
     SOURCE_IMAGE="quay.io/mhildenb/lab3-${IMAGE}:initial"
     echo "Importing $SOURCE_IMAGE"
-    oc import-image ${IMAGE}:1.0-SNAPSHOT --reference-policy=local --from=${SOURCE_IMAGE} --confirm -n ${PROJECT}
+    oc import-image ${IMAGE}:1.0-SNAPSHOT --reference-policy=local --from=${SOURCE_IMAGE} --confirm -n ${PROJECT} -o name
 done
 
 # Now potentially trigger Deployments by setting the latest tag in the image stream (which the DeploymentConfigs should be keyed to)
