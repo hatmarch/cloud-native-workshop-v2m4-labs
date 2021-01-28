@@ -3,8 +3,8 @@ set -Eeuo pipefail
 
 declare -r SCRIPT_DIR=$(cd -P $(dirname $0) && pwd)
 
-#declare -r USERS=( $(oc get project | grep -- -che | sed "s/-che.*$//g") )
-declare -r USERS=( user2 )
+declare -r USERS=( $(oc get project | grep -- -che | sed "s/-che.*$//g") )
+#declare -r USERS=( user3 user30 )
 declare -r PASSWORD="r3dh4t1!"
 
 # Where to find the .adoc files for the workshopper pod in the cluster
